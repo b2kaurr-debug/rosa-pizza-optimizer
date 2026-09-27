@@ -1,34 +1,24 @@
 ---
 name: notebook-to-streamlit
-description: Port the analysis functions from the Rosa's Pizza notebook (rosa_analysis.ipynb) into the Streamlit app (app.py), keeping the business logic identical.
+description: Port analysis functions from rosa_analysis.ipynb into app.py while preserving core business logic.
 ---
 
 # notebook-to-streamlit
 
-When asked to build or update the Streamlit app for the Rosa's Pizza project,
-treat the functions already written and tested in `rosa_analysis.ipynb` as the
-source of truth for business logic — do not re-derive the formulas from
-scratch.
+When updating the Streamlit application for the Rosa's Pizza project, treat the validated functions in `rosa_analysis.ipynb` as the source of truth for business logic.
 
-## Functions to port
+## Core Functions
 
-- `cost_per_late_order(costs)` — refund + churn * margin
-- `best_promise(zone, time_block, promises, costs)` — searches a list of
-  candidate promises and returns the one with the highest net profit, where
-  `net profit = orders * margin - late_orders * cost_per_late_order`
+- `cost_per_late_order(costs)` — computes total cost as `refund + churn * margin`.
+- `best_promise(zone, time_block, promises, costs)` — evaluates candidate promises to maximize net profit (`orders * margin - late_orders * cost_per_late_order`).
 
-## Steps
+## Implementation Guidelines
 
-1. Read the corresponding cells in `rosa_analysis.ipynb` (Part II.a and II.b).
-2. Reproduce the functions in `app.py` with the same parameter names and the
-   same formulas — do not change the math.
-3. Call `delivery_times(zone, time_block, promise, seed=1)` (same fixed seed as
-   the notebook) so app results are reproducible and match the notebook.
-4. Wire the ported functions to Streamlit widgets:
-   - `st.selectbox` for zone and time block (from `ZONES` / `TIME_BLOCKS`)
-   - `st.number_input` for the promise range (min, max, step) and for the cost
-     assumptions (margin, churn, refund), defaulted from `COSTS`
-   - `st.button` to trigger the search and display the recommended promise
-5. Do not hardcode zone/time-block names or cost figures anywhere in `app.py` —
-   always read them from the `starter` package or from the widget values, so
-   the app stays correct if the underlying data changes.
+1. Reference Parts II.a and II.b of `rosa_analysis.ipynb` to ensure parity.
+2. Maintain identical parameter signatures and mathematical formulations.
+3. Utilize `delivery_times(zone, time_block, promise, seed=1)` to ensure reproducibility matching the notebook.
+4. Bind functions to Streamlit controls:
+   - `st.selectbox` for zones and time blocks sourced from `ZONES` and `TIME_BLOCKS`.
+   - `st.number_input` for promise ranges and cost parameters (`margin`, `churn`, `refund`), initialized from `COSTS`.
+   - `st.button` execution triggers for optimization outputs.
+5. Avoid hardcoding domain values; dynamically reference the `starter` package or widget inputs.

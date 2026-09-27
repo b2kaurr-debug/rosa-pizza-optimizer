@@ -7,28 +7,16 @@ st.set_page_config(page_title="Rosa's Pizza — Delivery Promise Optimizer", pag
 
 st.title("🍕 Rosa's Pizza — Delivery Promise Optimizer")
 st.write(
-    "Pick a zone and time block, set the range of promised delivery times to test, "
-    "and adjust the cost assumptions if you'd like. Click **Find best promise** to "
-    "see the recommendation and how net profit changes across the range."
+    "Select a zone and time block, define the promise range to evaluate, "
+    "and adjust cost parameters as needed. Click **Find best promise** to "
+    "view optimal recommendations and net profit distributions."
 )
 
-# --- Ported from rosa_analysis.ipynb (Part II) ---
-# Keep this logic identical to the notebook's cost_per_late_order / best_promise
-# functions so the app and the notebook always agree.
-
 def cost_per_late_order(costs):
-    """Total cost to Rosa of a single late order: the refund paid directly,
-    plus the profit lost to churn (churned orders * profit margin per order)."""
     return costs["refund"] + costs["churn"] * costs["margin"]
 
 
 def best_promise(zone, time_block, promises, costs):
-    """Return (best_promise, best_net_profit, all_results) for a zone/time
-    block, searching over the candidate `promises`.
-
-    Net profit = (orders * profit margin per order)
-                 - (late orders * cost per late order)
-    """
     cost_late = cost_per_late_order(costs)
     margin = costs["margin"]
 
@@ -50,8 +38,6 @@ def best_promise(zone, time_block, promises, costs):
 
     return best_p, best_profit, all_results
 
-
-# --- UI ---
 
 col1, col2 = st.columns(2)
 with col1:
@@ -95,6 +81,6 @@ if st.button("Find best promise", type="primary"):
 
         if best_p in (promises[0], promises[-1]):
             st.info(
-                "The best promise found sits at the edge of your range — try "
-                "widening the range to make sure you're not missing a better option."
+                "The best promise found sits at the edge of your range — consider "
+                "widening the range to ensure optimal bounds are captured."
             )

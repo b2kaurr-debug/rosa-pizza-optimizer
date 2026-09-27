@@ -72,12 +72,11 @@ st.subheader("Cost assumptions")
 st.caption("Defaults are pulled from the starter package's COSTS dictionary.")
 c4, c5, c6 = st.columns(3)
 with c4:
-    margin = st.number_input("Profit margin per order ($)", value=float(COSTS["margin"]), step=0.5)
+    margin = st.number_input("Profit margin per order ($)", value=float(COSTS.get("margin", COSTS.get("MARGIN", 5.0))), step=0.5)
 with c5:
-    churn = st.number_input("Orders lost per late order (churn)", value=float(COSTS["churn"]), step=0.1)
+    churn = st.number_input("Orders lost per late order (churn)", value=float(COSTS.get("churn", COSTS.get("CHURN", 2.0))), step=0.1)
 with c6:
-    refund = st.number_input("Refund per late order ($)", value=float(COSTS["refund"]), step=0.5)
-
+    refund = st.number_input("Refund per late order ($)", value=float(COSTS.get("refund", COSTS.get("REFUND", 10.0))), step=0.5)
 custom_costs = {"margin": margin, "churn": churn, "refund": refund}
 
 if st.button("Find best promise", type="primary"):
